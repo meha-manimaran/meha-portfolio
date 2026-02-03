@@ -1924,28 +1924,9 @@ export default function Portfolio() {
                           </div>
                           <p style={styles.projectDescNew}>{p.subtitle}</p>
                           <ul style={styles.projectBulletList}>
-                            {p.id == 'instatools' ? (
-                              <>
-                                <li style={styles.projectBulletItem}>
-                                  Led product strategy for a self-serve, pay-per-use compliance platform (OFAC, PII), removing subscription friction for early-stage startups.
-                                </li>
-                                <li style={styles.projectBulletItem}>
-                                  Owned product discovery, UX direction, prioritization, and GTM; designed a &lt;5-minute time-to-first-check experience from signup to export.
-                                </li>
-                                <li style={styles.projectBulletItem}>
-                                  Launched MVP with 25+ beta users and 200+ checks completed; used engagement and repeat-purchase metrics to guide iteration.
-                                </li>
-                              </>
-                            ) : (
-                              <>
-                                <li style={styles.projectBulletItem}>
-                                  <strong>Built:</strong> {p.subtitle}
-                                </li>
-                                <li style={styles.projectBulletItem}>
-                                  <strong>Role:</strong> {p.overview.role}
-                                </li>
-                              </>
-                            )}
+                            <li style={styles.projectBulletItem}>
+                              <strong>Role:</strong> {p.overview.role}
+                            </li>
                           </ul>
                           <div style={styles.projectToolsLine}>
                             <span style={styles.projectToolsLabel}>Tools:</span>
