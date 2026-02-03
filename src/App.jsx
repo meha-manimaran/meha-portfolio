@@ -16,6 +16,14 @@ import slugMatesScreen05 from './assets/slugmates/SlugMates_Screen_05.png';
 import slugMatesScreen06 from './assets/slugmates/SlugMates_Screen_06.png';
 import slugMatesScreen07 from './assets/slugmates/SlugMates_Screen_07.png';
 import slugMatesScreen08 from './assets/slugmates/SlugMates_Screen_08.png';
+import slugMatesPrd from './assets/slugmates/SlugMates_PRD.docx.pdf';
+import tallyrusMockup1 from './assets/Tallyrus_mockups/tallyrus_mockup.png';
+import tallyrusMockup2 from './assets/Tallyrus_mockups/tallyrus_mockup_2.png';
+import tallyrusMockup3 from './assets/Tallyrus_mockups/tallyrus_mockup_3.png';
+import tallyrusMockup4 from './assets/Tallyrus_mockups/tallyrus_mockup_4.png';
+import headshot from './assets/Headshot.JPG';
+import boxsyLogo from './assets/boxsy_logo.png';
+import tallyrusLogo from './assets/tallyrus_logo.png';
 
 // Animated counter component
 const AnimatedCounter = ({ end, duration = 2000, suffix = '', prefix = '' }) => {
@@ -142,8 +150,8 @@ const caseStudiesData = [
     id: 'instatools', title: 'InstaTools', emoji: '🛡️', badge: 'B2B SaaS Product',
     subtitle: 'Pay-per-use compliance tools for early-stage startups',
     color: '#d4849a',
-    overview: { role: 'Product Manager', timeline: 'Sep 2025 - Dec 2025 (4 months)', team: '1 PM (me), 1 Engineer', tools: ['Figma', 'Notion', 'Replit', 'PostgreSQL'], status: 'Completed & Launched' },
-    links: { prototype: '#', prd: '#', live: '#' },
+    overview: { role: 'Product Manager', timeline: 'Sep 2025 - Dec 2025 (4 months)', team: '1 PM (me), 1 Engineer', tools: ['Figma', 'Replit'], status: 'Completed & Launched' },
+    links: { prototype: null, prd: null, live: 'https://instatools.co/' },
     
     // 1. Problem Statement
     problemStatement: {
@@ -279,31 +287,80 @@ const caseStudiesData = [
       ]
     },
     
-    // 8. Technical/System Awareness
-    technical: {
-      architecture: 'Monolithic Replit app with PostgreSQL database. Frontend and backend in single codebase for rapid iteration.',
-      apisUsed: [
-        { api: 'U.S. Treasury OFAC API', purpose: 'Real-time sanctions list data (free, authoritative source)' },
-        { api: 'Stripe', purpose: 'Payment processing and credit purchases' },
-        { api: 'OpenAI GPT-4', purpose: 'PII detection and contract analysis' },
-        { api: 'ZeroBounce (fallback)', purpose: 'Email verification with multi-provider failover' }
-      ],
-      dataModel: [
-        'Users (id, email, created_at, credit_balance)',
-        'Checks (id, user_id, type, input, result, credits_used, created_at)',
-        'Purchases (id, user_id, amount, credits, stripe_id, created_at)'
-      ],
-      constraints: [
-        'Replit has cold-start latency (~2s) on free tier',
-        'OpenAI API costs scale with usage (built credit pricing to maintain margins)',
-        'OFAC API has rate limits (implemented caching for repeated checks)'
-      ],
-      risks: [
-        { risk: 'OpenAI API cost overruns', mitigation: 'Set per-user daily limits, monitor spend alerts' },
-        { risk: 'Data privacy (storing PII temporarily)', mitigation: 'Process in memory, don\'t persist uploaded files' },
-        { risk: 'Treasury API downtime', mitigation: 'Cache recent OFAC list, show "data as of" timestamp' }
+    // 8. Technical Implementation + AI + Architecture
+    technicalImplementation: {
+      platform: 'Full-stack SaaS built on Replit',
+      stack: 'React + TypeScript, Express + Node.js, PostgreSQL + Drizzle ORM',
+      deployment: 'Replit integrated hosting with continuous deployment',
+      whyReplit: [
+        'Went from concept to live beta in 4 months instead of an estimated 8-12 months with traditional infra setup.',
+        'Real-time collaboration reduced local setup overhead and accelerated daily product-engineering syncs.',
+        'Integrated PostgreSQL provisioning and migrations removed weeks of DevOps setup.',
+        'Shipped 60+ beta updates without custom deployment configuration.'
       ]
     },
+    aiIntegration: [
+      {
+        title: 'PII Detection & Redaction',
+        challenge: 'Detect 20+ PII types across mixed file formats while minimizing false positives.',
+        approach: 'Hybrid pipeline: regex for structured data + LLM validation for context-sensitive matches.',
+        implementation: 'OCR -> entity extraction -> policy-based redaction with format-preserving output.',
+        impact: '94% precision and 98% recall on 2,000+ beta documents.'
+      },
+      {
+        title: 'Contract Clause Analysis',
+        challenge: 'Founders needed fast risk review of legal terms without manual line-by-line review.',
+        approach: 'LLM-based clause classification, term extraction, and confidence scoring for human review.',
+        implementation: 'Prompt templates classify clause risk and extract key terms like notice periods and liability limits.',
+        impact: 'Reduced standard SaaS contract review from ~2 hours to ~15 minutes.'
+      },
+      {
+        title: 'OFAC Sanctions Screening',
+        challenge: 'Name matching required handling transliteration and spelling variance.',
+        approach: 'Fuzzy/phonetic matching with adjustable sensitivity levels by use case.',
+        implementation: 'Cross-referenced against 15,000+ sanctioned entities with confidence scoring.',
+        impact: '99.7% match rate on published OFAC test cases.'
+      },
+      {
+        title: 'AI-Assisted Development',
+        challenge: 'Move fast without sacrificing quality during rapid beta iteration.',
+        approach: 'Used Replit AI + ChatGPT for boilerplate generation, test scaffolding, and documentation drafts.',
+        implementation: 'AI-generated initial endpoint tests and OpenAPI drafts, then manually refined.',
+        impact: 'Estimated 6-8 weeks of development time saved.'
+      }
+    ],
+    systemArchitecture: [
+      {
+        title: 'Multi-Tenant Workspace Model',
+        detail: 'Company -> Workspace -> Users with workspace-scoped queries and RBAC (owner/admin/member).',
+        impact: 'Supports SMB to mid-market expansion without re-architecting the core data model.'
+      },
+      {
+        title: 'Plugin Tool Architecture',
+        detail: 'Each tool ships with its own definition, processor, and validator; frontend has tool-specific result adapters.',
+        impact: 'Added three new tools in five weeks, with 1-2 week delivery per tool.'
+      },
+      {
+        title: 'File Processing Pipeline',
+        detail: 'Upload -> scan -> parse/OCR -> AI processing -> annotation/redaction -> exports (PDF/CSV/JSON).',
+        impact: 'Unified processing across PDF, DOCX, XLSX, and images with consistent output quality.'
+      },
+      {
+        title: 'Provider Failover + Resilience',
+        detail: 'Primary/fallback providers with circuit breakers, retries, and health checks.',
+        impact: 'Maintained high API reliability during upstream provider instability.'
+      },
+      {
+        title: 'Async Job Processing',
+        detail: 'Long-running analyses moved to background jobs with status tracking and webhook callbacks.',
+        impact: 'Prevented request blocking for 30-60 second workloads.'
+      },
+      {
+        title: 'Transactional Credit Ledger',
+        detail: 'Credit deductions handled with DB transactions and audit logging to avoid race conditions.',
+        impact: 'Billing remained accurate and auditable under concurrent usage.'
+      }
+    ],
     
     // 9. Launch & GTM
     launchGtm: {
@@ -326,37 +383,40 @@ const caseStudiesData = [
     results: {
       launched: true,
       metrics: [
-        { metric: 'Beta users', value: '25+', context: 'Onboarded in first 2 weeks' },
-        { metric: 'Checks completed', value: '200+', context: 'Across OFAC and PII tools' },
-        { metric: 'Avg time-to-first-check', value: '4.2 min', context: 'Under 5-minute target ✓' },
-        { metric: 'Repeat purchase rate', value: '32%', context: 'Below 40% target—needs work' }
+        { metric: 'Beta signups', target: '20', actual: '32', status: '+60%', context: 'Exceeded initial acquisition target' },
+        { metric: 'Time-to-first-check', target: '< 5 min', actual: '4.2 min', status: 'Met', context: 'Validated self-serve onboarding goal' },
+        { metric: 'Checks completed', target: '150', actual: '247', status: '+65%', context: 'Strong early usage across tools' },
+        { metric: 'Repeat purchase rate', target: '40%', actual: '32%', status: 'Below target', context: 'Retention improvement opportunity' },
+        { metric: 'Multi-tool adoption', target: '25%', actual: '18%', status: 'Below target', context: 'Discovery and upsell need work' },
+        { metric: 'API uptime', target: '99.5%', actual: '99.8%', status: 'Met', context: 'Reliable beta operations' }
       ],
       feedback: [
-        { quote: '"Finally a compliance tool that doesn\'t require a 6-month procurement process."', author: 'Beta User, Ops Lead' },
-        { quote: '"The credit system is genius. I only pay for what I use."', author: 'Beta User, Founder' }
+        { quote: '"This is what I wished enterprise compliance tools were. I spent $12 and got exactly what I needed."', author: 'Founder, Series A fintech startup' },
+        { quote: '"PII detection saved us roughly 40 hours before our audit."', author: 'Ops Lead, B2B SaaS company' },
+        { quote: '"We integrated OFAC screening in two days instead of building from scratch."', author: 'CTO, API customer' }
       ],
       learnings: [
-        { learning: 'Pay-per-use removes adoption friction', detail: 'Users were far more willing to try when they could start with $10 vs. $500/month commitment.' },
-        { learning: 'Export is table-stakes for B2B', detail: 'Every single user asked about export in first session. Built it day one.' },
-        { learning: 'Repeat purchase rate needs work', detail: '32% is below target. Hypothesis: users forget about us between compliance needs. Testing email reminders.' }
+        { learning: 'Pay-per-use pricing removed adoption friction', detail: 'Most beta users cited "no commitment" as the reason they tried InstaTools over subscription competitors.' },
+        { learning: 'Self-serve onboarding worked', detail: 'Most users completed their first check without support, confirming UX simplicity was sufficient for MVP.' },
+        { learning: 'Retention needs active re-engagement', detail: 'Repeat purchase trailed target, likely due to episodic compliance usage. Next bets: reminders + workspace notifications.' }
       ]
     },
     
     // 11. What's Next
     whatsNext: {
       immediate: [
-        'Email reminder system for dormant users (address repeat purchase rate)',
-        'Batch upload UX improvements (current flow has 15% drop-off)',
-        'Contract analysis launch (highest-requested feature from beta users)'
+        'Email reminder system (14-day inactivity + unused credits trigger) to improve repeat purchases.',
+        'Slack workspace integration for check completion and low-credit alerts.',
+        'Post-check upsell flow to increase cross-tool adoption.'
       ],
       longTerm: [
-        'API access for developer persona',
-        'Team workspaces with role-based permissions',
-        'Enterprise tier with SSO and audit logs'
+        'Contract analysis v2 (risk scoring, clause-level summaries, negotiation suggestions).',
+        'Team workspace expansion (shared credit pools, usage reporting, role permissions).',
+        'Enterprise/API expansion (SSO, SDKs, webhooks v2, audit export controls).'
       ],
       risks: [
         'OpenAI pricing changes could squeeze margins',
-        'Larger players (Stripe, Plaid) could add compliance features',
+        'Larger players could add bundled compliance features',
         'Regulatory changes could shift compliance requirements'
       ]
     }
@@ -367,7 +427,7 @@ const caseStudiesData = [
     subtitle: 'Roommate matching platform for college students',
     color: '#d4849a',
     overview: { role: 'PM & Developer', timeline: 'Nov 2025 - Present', team: 'Solo (PM + Dev)', tools: ['Figma', 'Notion', 'Firebase', 'React Native'], status: 'In Development' },
-    links: { prototype: '#', prd: '#', live: null },
+    links: { prototype: null, prd: slugMatesPrd, live: null },
     
     // 1. Problem Statement
     problemStatement: {
@@ -583,6 +643,100 @@ const caseStudiesData = [
         'Competition from university building their own solution'
       ]
     }
+  },
+  {
+    id: 'tallyrus', title: 'Tallyrus', emoji: '📚', badge: 'AI EdTech Platform',
+    subtitle: 'Bulk AI-powered document analysis for educators and organizations',
+    color: '#d4849a',
+    overview: { role: 'Product Manager', timeline: 'Sep 2024 - Mar 2025 (7 months)', team: '1 PM (me), 3 Engineers', tools: ['Vercel AI SDK', 'LangChain', 'Next.js', 'TypeScript'], status: 'Completed & Deployed' },
+    links: { prototype: null, prd: null, live: 'https://tallyrus.com/' },
+
+    problemStatement: {
+      user: 'Educators, administrators, and organizations evaluating large volumes of student or applicant documents.',
+      problem: 'Manual grading and review consumed too much time, varied by evaluator, and broke down at scale when teams had to review document batches with nuanced criteria.',
+      whyExistingFail: 'Most tools were either single-document workflows or rigid rubric systems. Teams needed bulk processing plus flexible evaluation logic without sacrificing consistency.',
+      quote: {
+        text: '"We spend more time reviewing docs than coaching students. We needed a way to scale evaluation without losing quality."',
+        author: 'Program Administrator'
+      }
+    },
+
+    userContext: {
+      personas: [
+        {
+          name: 'Priya - High School Teacher',
+          description: 'Grades essays and project submissions across multiple sections every week.',
+          jtbd: 'When I receive dozens of submissions, I want consistent first-pass analysis so I can focus on high-value feedback.',
+          constraints: ['Limited grading hours', 'Needs consistent criteria application', 'Cannot adopt complex enterprise tooling']
+        },
+        {
+          name: 'Daniel - Program Coordinator',
+          description: 'Reviews large sets of applications and supporting documents for admissions and scholarships.',
+          jtbd: 'When ranking candidates, I want structured comparisons across many documents without reading each file start-to-finish.',
+          constraints: ['High seasonal volume spikes', 'Requires auditable decisions', 'Needs exportable summaries for committees']
+        }
+      ]
+    },
+
+    solutionOverview: {
+      whatBuilt: [
+        'Bulk document upload and parallel processing pipeline',
+        'Custom evaluation criteria and rubric interpretation',
+        'AI-generated per-document analysis with reasoning transparency',
+        'Comparative insights across document sets and exportable reports'
+      ],
+      tradeoffs: [
+        { decision: 'Prioritized rubric flexibility over deep LMS integrations', why: 'Validated core PMF around evaluation quality and speed first.' },
+        { decision: 'Shipped broad document support before advanced dashboards', why: 'Unblocked immediate user value across mixed file formats.' },
+        { decision: 'Implemented robust CI/CD early', why: 'Needed fast iteration without regressions as AI prompts and logic evolved.' }
+      ],
+      notBuilt: [
+        'Custom model fine-tuning in MVP',
+        'Multi-language support in MVP',
+        'Native LMS integrations (Canvas/Blackboard) in first release'
+      ]
+    },
+
+    wireframes: {
+      description: 'Workflow and architecture designs were documented in Figma and engineering docs.',
+      designDecisions: [
+        { decision: 'Batch-first upload experience', rationale: 'Users consistently worked in bulk, so the product optimized for multi-file throughput instead of single-document flows.' },
+        { decision: 'Criteria builder with plain-language inputs', rationale: 'Reduced setup friction and made rubric creation usable for non-technical educators.' },
+        { decision: 'Transparent output formatting', rationale: 'Included clear reasoning structure so evaluators could trust and audit AI recommendations.' }
+      ]
+    },
+
+    results: {
+      metrics: [
+        { metric: 'Time savings', value: '70-80%', context: 'Reduction in average document evaluation time reported by pilot users' },
+        { metric: 'Bug-fix turnaround', value: '12-16 hours avg', context: 'Down from 48+ hours after CI/CD rollout' },
+        { metric: 'Deployment cadence', value: 'Daily', context: 'Improved from weekly releases through automated pipelines' },
+        { metric: 'Test coverage', value: '85%+', context: 'Sustained high code quality with zero critical production incidents post-rollout' }
+      ],
+      learnings: [
+        { learning: 'Agile rigor creates speed', detail: 'Two-week sprint discipline improved delivery predictability and stakeholder trust.' },
+        { learning: 'Architecture choices shape product strategy', detail: 'Choosing Vercel AI SDK + LangChain enabled faster iteration on advanced analysis experiences.' },
+        { learning: 'Quality infrastructure is a product advantage', detail: 'CI/CD and test automation shortened feedback loops and improved reliability for users.' }
+      ]
+    },
+
+    whatsNext: {
+      immediate: [
+        'Expand support for multilingual document evaluation',
+        'Launch deeper comparative analytics for cohort-level insights',
+        'Integrate with Canvas and Blackboard for workflow continuity'
+      ],
+      longTerm: [
+        'Offer organization-specific model tuning by evaluation standards',
+        'Add longitudinal performance and outcome prediction dashboards',
+        'Build enterprise governance features for compliance and audit controls'
+      ],
+      risks: [
+        'AI model cost volatility affecting margins',
+        'Need for institution-specific policy customization at scale',
+        'Competitive pressure from larger EdTech platforms adding AI review features'
+      ]
+    }
   }
 ];
 
@@ -592,38 +746,57 @@ const CaseStudyPage = ({ caseStudiesData, activeCaseStudy, setActiveCaseStudy, o
   const activeCS = caseStudiesData.find(cs => cs.id === activeCaseStudy) || caseStudiesData[0];
   const isInstaTools = activeCS.id === 'instatools';
   const isSlugmates = activeCS.id === 'slugmates';
+  const isTallyrus = activeCS.id === 'tallyrus';
   const conciseCopy = {
     tldr: isInstaTools
       ? "Early-stage startups need compliance tools like OFAC screening and PII detection, but enterprise pricing and sales-led onboarding block adoption. I led the product strategy for a self-serve, credit-based platform that lets founders run checks in minutes without long contracts."
-      : "Students need safe, compatible roommates, but random housing assignments and Facebook groups create friction and risk. I built a mobile-first, .edu-verified matching product that uses a compatibility quiz to deliver trusted, transparent matches.",
+      : isSlugmates
+        ? "Students need safe, compatible roommates, but random housing assignments and Facebook groups create friction and risk. I built a mobile-first, .edu-verified matching product that uses a compatibility quiz to deliver trusted, transparent matches."
+        : "Educators and organizations needed to evaluate large document sets faster without sacrificing consistency. I led product strategy and delivery for an AI platform that supports bulk processing, customizable evaluation criteria, and structured insights.",
     note: isInstaTools
       ? "Note: I led product discovery, UX direction, prioritization, and go-to-market strategy. Engineering execution was handled by a dedicated engineer."
-      : "Note: I led product strategy and execution as a solo builder (PM + dev).",
+      : isSlugmates
+        ? "Note: I led product strategy and execution as a solo builder (PM + dev)."
+        : "Note: I led product direction from discovery through deployment, including Agile delivery, AI architecture decisions, and CI/CD quality systems.",
     painPoints: isInstaTools
       ? [
           "Too expensive ($500+/month minimums).",
           "Overbuilt for low, unpredictable usage.",
           "Locked behind sales-led onboarding and annual contracts."
         ]
-      : [
-          "Random assignments ignore lifestyle compatibility.",
-          "Facebook groups are chaotic and unsafe.",
-          "No structured way to assess fit or verify users."
-        ],
+      : isSlugmates
+        ? [
+            "Random assignments ignore lifestyle compatibility.",
+            "Facebook groups are chaotic and unsafe.",
+            "No structured way to assess fit or verify users."
+          ]
+        : [
+            "Manual review consumed 40-60% of educator time.",
+            "Evaluation quality varied across reviewers.",
+            "Existing tools did not support flexible bulk analysis."
+          ],
     insight: isInstaTools
       ? "Compliance usage for startups is episodic, not recurring. Pricing - not features - is the primary blocker to adoption."
-      : "Matching only works when trust and compatibility are explicit. Verification and transparency drive real adoption.",
+      : isSlugmates
+        ? "Matching only works when trust and compatibility are explicit. Verification and transparency drive real adoption."
+        : "The winning wedge was not just AI grading - it was combining bulk throughput with customizable criteria and transparent reasoning.",
     strategy: isInstaTools
       ? [
           "Replace subscriptions with pay-per-use credits.",
           "Deliver a fully self-serve experience with instant value.",
           "Design for time-to-first-check under 5 minutes."
         ]
-      : [
-          "Use a compatibility quiz to drive better matches.",
-          "Require .edu verification to build trust.",
-          "Go mobile-first for daily engagement."
-        ],
+      : isSlugmates
+        ? [
+            "Use a compatibility quiz to drive better matches.",
+            "Require .edu verification to build trust.",
+            "Go mobile-first for daily engagement."
+          ]
+        : [
+            "Optimize for batch document workflows first.",
+            "Enable customizable criteria instead of fixed rubrics.",
+            "Invest early in CI/CD to ship AI improvements safely and quickly."
+          ],
     scope: isInstaTools
       ? [
           "OFAC sanctions screening.",
@@ -633,20 +806,27 @@ const CaseStudyPage = ({ caseStudiesData, activeCaseStudy, setActiveCaseStudy, o
           "Shared credit wallet across tools.",
           "Self-serve onboarding to first check."
         ]
-      : [
-          "Compatibility quiz (15 factors).",
-          "Match feed with compatibility %.",
-          "In-app messaging post-match.",
-          ".edu email verification."
-        ],
+      : isSlugmates
+        ? [
+            "Compatibility quiz (15 factors).",
+            "Match feed with compatibility %.",
+            "In-app messaging post-match.",
+            ".edu email verification."
+          ]
+        : [
+            "Bulk upload and parallel document processing.",
+            "Custom rubric and criteria interpretation.",
+            "Per-document reasoning and structured scoring output.",
+            "Comparative analytics and exportable reporting."
+          ],
     flow: isInstaTools
       ? "Signup -> Purchase credits -> Run check -> View results -> Export"
-      : "Download -> Signup -> Verify email -> Complete quiz -> See matches",
+      : isSlugmates
+        ? "Download -> Signup -> Verify email -> Complete quiz -> See matches"
+        : "Upload docs -> Define criteria -> Run batch analysis -> Review insights -> Export",
     tradeoffs: activeCS.solutionOverview?.tradeoffs || [],
     outOfScope: activeCS.solutionOverview?.notBuilt || [],
-    results: isInstaTools
-      ? activeCS.results?.metrics || []
-      : activeCS.results?.validationSoFar || [],
+    results: isSlugmates ? activeCS.results?.validationSoFar || [] : activeCS.results?.metrics || [],
     learnings: activeCS.results?.learnings || [],
     nextImmediate: activeCS.whatsNext?.immediate || [],
     nextLongTerm: activeCS.whatsNext?.longTerm || [],
@@ -658,13 +838,21 @@ const CaseStudyPage = ({ caseStudiesData, activeCaseStudy, setActiveCaseStudy, o
           "Define and evaluate success using real metrics.",
           "Iterate based on user behavior, not assumptions."
         ]
-      : [
-          "Translate messy user problems into a clear product strategy.",
-          "Balance trust, safety, and adoption in a student market.",
-          "Ship a full MVP solo with measurable validation.",
-          "Design for transparency to improve match quality.",
-          "Use research to guide product tradeoffs."
-        ],
+      : isSlugmates
+        ? [
+            "Translate messy user problems into a clear product strategy.",
+            "Balance trust, safety, and adoption in a student market.",
+            "Ship a full MVP solo with measurable validation.",
+            "Design for transparency to improve match quality.",
+            "Use research to guide product tradeoffs."
+          ]
+        : [
+            "Translate user pain into a scalable AI product strategy.",
+            "Drive architecture decisions that directly improved UX and delivery speed.",
+            "Build quality infrastructure as a competitive product capability.",
+            "Balance technical ambition with focused MVP scope.",
+            "Operationalize Agile to accelerate predictable outcomes."
+          ],
     mockups: isInstaTools
       ? [
           { label: 'UI mockup 1', image: instaToolMockup1 },
@@ -677,40 +865,59 @@ const CaseStudyPage = ({ caseStudiesData, activeCaseStudy, setActiveCaseStudy, o
           { label: 'UI mockup 8', image: instaToolMockup8 },
           { label: 'UI mockup 9', image: instaToolMockup9 }
         ]
-      : [
-          {
-            label: '1. Welcome Screen',
-            image: slugMatesScreen01
-          },
-          {
-            label: '2. Profile Creation',
-            image: slugMatesScreen02
-          },
-          {
-            label: '3. Compatibility Quiz',
-            image: slugMatesScreen03
-          },
-          {
-            label: '4. Discover Screen',
-            image: slugMatesScreen04
-          },
-          {
-            label: '5. Match Celebration',
-            image: slugMatesScreen05
-          },
-          {
-            label: '6. Matches List',
-            image: slugMatesScreen06
-          },
-          {
-            label: '7. Chat Screen',
-            image: slugMatesScreen07
-          },
-          {
-            label: '8. Profile Screen',
-            image: slugMatesScreen08
-          }
-        ]
+      : isSlugmates
+        ? [
+            {
+              label: '1. Welcome Screen',
+              image: slugMatesScreen01
+            },
+            {
+              label: '2. Profile Creation',
+              image: slugMatesScreen02
+            },
+            {
+              label: '3. Compatibility Quiz',
+              image: slugMatesScreen03
+            },
+            {
+              label: '4. Discover Screen',
+              image: slugMatesScreen04
+            },
+            {
+              label: '5. Match Celebration',
+              image: slugMatesScreen05
+            },
+            {
+              label: '6. Matches List',
+              image: slugMatesScreen06
+            },
+            {
+              label: '7. Chat Screen',
+              image: slugMatesScreen07
+            },
+            {
+              label: '8. Profile Screen',
+              image: slugMatesScreen08
+            }
+          ]
+        : [
+            {
+              label: '1. Batch Upload Workflow',
+              image: tallyrusMockup1
+            },
+            {
+              label: '2. Criteria Builder',
+              image: tallyrusMockup2
+            },
+            {
+              label: '3. AI Analysis Output',
+              image: tallyrusMockup3
+            },
+            {
+              label: '4. Comparative Insights Dashboard',
+              image: tallyrusMockup4
+            }
+          ]
   };
 
   return (
@@ -782,13 +989,17 @@ const CaseStudyPage = ({ caseStudiesData, activeCaseStudy, setActiveCaseStudy, o
                     </div>
                     <div>
                       <span style={styles.csMetaLabelDark}>Tools</span>
-                      <span style={styles.csMetaValueDark}>{activeCS.overview.tools.join(', ')}</span>
+                      <span style={styles.csMetaValueDark}>
+                        {activeCS.id === 'instatools'
+                          ? `Built using Replit, ${activeCS.overview.tools.filter((t) => t !== 'Replit').join(', ')}`
+                          : activeCS.overview.tools.join(', ')}
+                      </span>
                     </div>
                   </div>
                   <div style={styles.csLinkRow}>
                     {activeCS.links.prototype && <a href={activeCS.links.prototype} style={styles.csLinkInline}>?? View Prototype</a>}
-                    {activeCS.links.prd && <a href={activeCS.links.prd} style={styles.csLinkInline}>?? Read PRD</a>}
-                    {activeCS.links.live && <a href={activeCS.links.live} style={styles.csLinkInline}>?? Live Product</a>}
+                    {activeCS.links.prd && <a href={activeCS.links.prd} style={styles.csLinkInline}>Read PRD</a>}
+                    {activeCS.links.live && <a href={activeCS.links.live} style={styles.csLinkInline}>Live Product</a>}
                   </div>
                   <p style={styles.csNote}>{conciseCopy.note}</p>
                 </div>
@@ -833,58 +1044,195 @@ const CaseStudyPage = ({ caseStudiesData, activeCaseStudy, setActiveCaseStudy, o
                   <p style={styles.csText}><strong>Primary flow:</strong> {conciseCopy.flow}</p>
                 </div>
 
+                {isInstaTools && activeCS.technicalImplementation && (
+                  <div style={styles.csSectionBox}>
+                    <h3 style={styles.csSectionTitle}>Technical Implementation</h3>
+                    <p style={styles.csText}><strong>Platform:</strong> {activeCS.technicalImplementation.platform}</p>
+                    <p style={styles.csText}><strong>Stack:</strong> {activeCS.technicalImplementation.stack}</p>
+                    <p style={styles.csText}><strong>Deployment:</strong> {activeCS.technicalImplementation.deployment}</p>
+                    <p style={styles.csText}><strong>Why Replit:</strong></p>
+                    <ul style={styles.csBulletList}>
+                      {activeCS.technicalImplementation.whyReplit.map((item, i) => <li key={i} style={styles.csBulletItem}>{item}</li>)}
+                    </ul>
+                  </div>
+                )}
+
+                {isInstaTools && Array.isArray(activeCS.aiIntegration) && (
+                  <div style={styles.csSectionBox}>
+                    <h3 style={styles.csSectionTitle}>AI Integration</h3>
+                    <p style={{ ...styles.csText, marginBottom: '0.9rem' }}>How I built AI features at InstaTools.</p>
+                    <div>
+                      <div style={styles.aiCardGrid} className="ai-card-grid">
+                        {activeCS.aiIntegration.map((item, i) => {
+                          const icon = ['🛡️', '📜', '🌍', '⚡'][i] || '🤖';
+                          return (
+                            <div key={i} style={styles.aiCard}>
+                              <div style={styles.aiCardTitle}>{icon} {item.title}</div>
+                              <div style={styles.aiItem}><strong>Challenge ▼</strong> {item.challenge}</div>
+                              <div style={styles.aiItem}><strong>Approach ▼</strong> {item.approach}</div>
+                              <div style={styles.aiItem}><strong>Implementation ▼</strong> {item.implementation}</div>
+                              <div style={styles.aiImpact}><strong>Impact ⭐ ▲</strong> {item.impact}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      <div style={styles.aiMetricsWrap}>
+                        <div style={styles.aiMetricsTitle}>Key Metrics</div>
+                        <div style={styles.aiMetricsRow} className="ai-metrics-row">
+                          {['94% precision', '98% recall', '88% faster review', '99.7% OFAC match', 'Faster dev cycles'].map((m, i) => (
+                            <span key={i} style={styles.aiMetricChip}>{m}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {isInstaTools && Array.isArray(activeCS.systemArchitecture) && (
+                  <div style={styles.csSectionBox}>
+                    <h3 style={styles.csSectionTitle}>System Architecture & Key Decisions</h3>
+                    <ul style={styles.csBulletList}>
+                      {activeCS.systemArchitecture.map((item, i) => (
+                        <li key={i} style={styles.csBulletItem}>
+                          <strong>{item.title}:</strong> {item.detail} <em>Impact:</em> {item.impact}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
                 <div style={styles.csSectionBox}>
                   <h3 style={styles.csSectionTitle}>Wireframes & UX</h3>
                   {isInstaTools ? (
                     <>
-                      <div style={styles.csMockupGridTwo} className="cs-mockup-grid">
-                        {conciseCopy.mockups.slice(0, 6).map((m, i) => {
-                          const mockupLabel =
-                            [
-                              '1. Landing Page',
-                              '2. Tool Page - Upload State',
-                              '3. File Uploaded - Ready to Pay',
-                              '4. Processing State',
-                              '5. Results - Download Ready',
-                              '6. Checkout Modal',
-                              '7. Mobile responsive view'
-                            ][i] || '';
-                          const [mockupNum, ...mockupTextParts] = mockupLabel.split(' ');
-                          const mockupText = mockupTextParts.join(' ');
-                          if (typeof m === 'string') {
-                            return (
-                              <div key={`mockup-stack-${i}`} style={styles.csMockupBox}>
-                                <span style={styles.csMockupLabel}>{m}</span>
-                              </div>
-                            );
-                          }
+                      {[[0, 1], [2, 3], [4, 5]].map((pair, rowIdx) => (
+                        <div
+                          key={`insta-row-${rowIdx}`}
+                          style={{
+                            border: '1px solid rgba(212,132,154,0.28)',
+                            borderRadius: 16,
+                            padding: '0.9rem',
+                            background: 'rgba(255,255,255,0.72)',
+                            marginBottom: '0.9rem'
+                          }}
+                        >
+                          <div style={styles.csMockupGridTwo} className="cs-mockup-grid">
+                            {pair.map((idx) => {
+                              const m = conciseCopy.mockups[idx];
+                              const mockupLabel = [
+                                '1️⃣ Landing Page',
+                                '2️⃣ Tool Page - Upload State',
+                                '3️⃣ File Uploaded',
+                                '4️⃣ Processing State',
+                                '5️⃣ Results - Download',
+                                '6️⃣ Checkout Modal'
+                              ][idx] || '';
 
-                          return (
-                            <figure key={`mockup-stack-${i}`} style={styles.csMockupFigure}>
-                              <div style={styles.csMockupImageFrame}>
-                                {mockupLabel ? (
-                                  <span style={styles.csMockupBadgeWrap}>
-                                    <span style={styles.csMockupBadgeNum}>{mockupNum}</span>
-                                    <span style={styles.csMockupBadgeText}>{mockupText}</span>
-                                  </span>
-                                ) : null}
-                                <img
-                                  src={m.image}
-                                  alt={m.label}
-                                  style={styles.csMockupImage}
-                                  loading="lazy"
-                                />
-                              </div>
-                            </figure>
-                          );
-                        })}
+                              if (typeof m === 'string') {
+                                return (
+                                  <div key={`mockup-stack-${idx}`} style={styles.csMockupBox}>
+                                    <span style={styles.csMockupLabel}>{m}</span>
+                                  </div>
+                                );
+                              }
+
+                              return (
+                                <figure key={`mockup-stack-${idx}`} style={styles.csMockupFigure}>
+                                  <div style={{ marginBottom: '0.5rem', fontWeight: 600, color: '#6b5e50', fontSize: '0.9rem' }}>
+                                    {mockupLabel}
+                                  </div>
+                                  <div
+                                    style={{
+                                      ...styles.csMockupImageFrame,
+                                      padding: '2%',
+                                      aspectRatio: '16 / 10',
+                                      border: '1px solid rgba(212,132,154,0.2)',
+                                      borderRadius: 12,
+                                      background: 'rgba(255,255,255,0.96)'
+                                    }}
+                                  >
+                                    <img
+                                      src={m.image}
+                                      alt={m.label}
+                                      style={styles.csMockupImage}
+                                      loading="lazy"
+                                    />
+                                  </div>
+                                </figure>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                      <div
+                        style={{
+                          border: '1px solid rgba(212,132,154,0.28)',
+                          borderRadius: 16,
+                          padding: '0.9rem',
+                          background: 'rgba(255,255,255,0.72)'
+                        }}
+                      >
+                        <div style={{ marginBottom: '0.6rem', fontWeight: 600, color: '#6b5e50', fontSize: '0.92rem' }}>
+                          7️⃣ Mobile Responsive Views
+                        </div>
+                        <div style={styles.csMockupGridTight} className="cs-mockup-grid">
+                          {conciseCopy.mockups.slice(6).map((m, i) => {
+                            if (typeof m === 'string') {
+                              return (
+                                <div key={`mockup-grid-${i}`} style={styles.csMockupBox}>
+                                  <span style={styles.csMockupLabel}>{m}</span>
+                                </div>
+                              );
+                            }
+
+                            return (
+                              <figure key={`mockup-grid-${i}`} style={styles.csMockupFigure}>
+                                <div
+                                  style={{
+                                    ...styles.csMockupImageFrame,
+                                    padding: '4%',
+                                    aspectRatio: '9 / 16',
+                                    border: '1px solid rgba(212,132,154,0.2)',
+                                    borderRadius: 12,
+                                    background: 'rgba(255,255,255,0.96)'
+                                  }}
+                                >
+                                  <img
+                                    src={m.image}
+                                    alt={m.label}
+                                    style={{ ...styles.csMockupImage, width: '80%', height: '80%', margin: '0 auto' }}
+                                    loading="lazy"
+                                  />
+                                </div>
+                              </figure>
+                            );
+                          })}
+                        </div>
                       </div>
-                      <div style={styles.csMockupSubhead}>
-                        <span style={styles.csMockupSubheadNum}>7</span>
-                        <span>Mobile responsive view</span>
-                      </div>
+                    </>
+                  ) : isSlugmates ? (
+                    <div
+                      style={{
+                        border: '1px solid rgba(212,132,154,0.28)',
+                        borderRadius: 16,
+                        padding: '0.9rem',
+                        background: 'rgba(255,255,255,0.72)'
+                      }}
+                    >
                       <div style={styles.csMockupGridTight} className="cs-mockup-grid">
-                        {conciseCopy.mockups.slice(6).map((m, i) => {
+                        {conciseCopy.mockups.map((m, i) => {
+                          const mockupLabel = [
+                            '1️⃣ Welcome Screen',
+                            '2️⃣ Profile Creation',
+                            '3️⃣ Compatibility Quiz',
+                            '4️⃣ Discover Screen',
+                            '5️⃣ Match Celebration',
+                            '6️⃣ Matches List',
+                            '7️⃣ Chat Screen',
+                            '8️⃣ Profile Screen'
+                          ][i] || '';
+
                           if (typeof m === 'string') {
                             return (
                               <div key={`mockup-grid-${i}`} style={styles.csMockupBox}>
@@ -895,11 +1243,23 @@ const CaseStudyPage = ({ caseStudiesData, activeCaseStudy, setActiveCaseStudy, o
 
                           return (
                             <figure key={`mockup-grid-${i}`} style={styles.csMockupFigure}>
-                              <div style={styles.csMockupImageFrameSmall}>
+                              <div style={{ marginBottom: '0.45rem', fontWeight: 600, color: '#6b5e50', fontSize: '0.84rem' }}>
+                                {mockupLabel}
+                              </div>
+                              <div
+                                style={{
+                                  ...styles.csMockupImageFrame,
+                                  padding: '4%',
+                                  aspectRatio: '9 / 16',
+                                  border: '1px solid rgba(212,132,154,0.2)',
+                                  borderRadius: 12,
+                                  background: 'rgba(255,255,255,0.96)'
+                                }}
+                              >
                                 <img
                                   src={m.image}
                                   alt={m.label}
-                                  style={styles.csMockupImageSmall}
+                                  style={{ ...styles.csMockupImage, width: '80%', height: '80%', margin: '0 auto' }}
                                   loading="lazy"
                                 />
                               </div>
@@ -907,45 +1267,55 @@ const CaseStudyPage = ({ caseStudiesData, activeCaseStudy, setActiveCaseStudy, o
                           );
                         })}
                       </div>
-                    </>
-                  ) : isSlugmates ? (
-                    <div style={styles.csMockupGrid} className="cs-mockup-grid">
+                    </div>
+                  ) : isTallyrus ? (
+                    <div style={styles.csMockupGridStack} className="cs-mockup-grid">
                       {conciseCopy.mockups.map((m, i) => {
-                        const mockupLabel =
-                          [
-                            '1. Welcome Screen',
-                            '2. Profile Creation',
-                            '3. Compatibility Quiz',
-                            '4. Discover Screen',
-                            '5. Match Celebration',
-                            '6. Matches List',
-                            '7. Chat Screen',
-                            '8. Profile Screen'
-                          ][i] || '';
-                        const [mockupNum, ...mockupTextParts] = mockupLabel.split(' ');
-                        const mockupText = mockupTextParts.join(' ');
+                        const mockupLabel = [
+                          '1️⃣ Batch Upload Workflow',
+                          '2️⃣ Criteria Builder',
+                          '3️⃣ AI Analysis Output',
+                          '4️⃣ Comparative Insights Dashboard'
+                        ][i] || '';
 
                         if (typeof m === 'string') {
                           return (
-                            <div key={`mockup-grid-${i}`} style={styles.csMockupBox}>
+                            <div key={`mockup-stack-${i}`} style={styles.csMockupBox}>
                               <span style={styles.csMockupLabel}>{m}</span>
                             </div>
                           );
                         }
 
                         return (
-                          <figure key={`mockup-grid-${i}`} style={styles.csMockupFigure}>
+                          <figure
+                            key={`mockup-stack-${i}`}
+                            style={{
+                              ...styles.csMockupFigure,
+                              border: '1px solid rgba(212,132,154,0.28)',
+                              borderRadius: 16,
+                              padding: '0.9rem',
+                              background: 'rgba(255,255,255,0.72)'
+                            }}
+                          >
                             {mockupLabel ? (
-                              <div style={styles.csMockupInlineLabel}>
-                                <span style={styles.csMockupSubheadNum}>{mockupNum}</span>
-                                <span style={styles.csMockupInlineText}>{mockupText}</span>
+                              <div style={{ marginBottom: '0.6rem', fontWeight: 600, color: '#6b5e50', fontSize: '0.92rem' }}>
+                                {mockupLabel}
                               </div>
                             ) : null}
-                            <div style={styles.csMockupImageFrameSmall}>
+                            <div
+                              style={{
+                                ...styles.csMockupImageFrame,
+                                padding: '2%',
+                                aspectRatio: '16 / 9',
+                                border: '1px solid rgba(212,132,154,0.2)',
+                                borderRadius: 12,
+                                background: 'rgba(255,255,255,0.96)'
+                              }}
+                            >
                               <img
                                 src={m.image}
                                 alt={m.label}
-                                style={styles.csMockupImageSmall}
+                                style={styles.csMockupImage}
                                 loading="lazy"
                               />
                             </div>
@@ -1010,10 +1380,26 @@ const CaseStudyPage = ({ caseStudiesData, activeCaseStudy, setActiveCaseStudy, o
                   <ul style={styles.csBulletList}>
                     {conciseCopy.results.map((m, i) => (
                       <li key={i} style={styles.csBulletItem}>
-                        <strong>{m.metric}:</strong> {m.value} {m.context ? `- ${m.context}` : ''}
+                        <strong>{m.metric}:</strong>{' '}
+                        {m.target
+                          ? `Target ${m.target} | Actual ${m.actual} | ${m.status}`
+                          : m.value}
+                        {m.context ? ` - ${m.context}` : ''}
                       </li>
                     ))}
                   </ul>
+                  {isInstaTools && activeCS.results?.feedback?.length > 0 && (
+                    <>
+                      <p style={styles.csText}><strong>User feedback highlights:</strong></p>
+                      <ul style={styles.csBulletList}>
+                        {activeCS.results.feedback.map((f, i) => (
+                          <li key={i} style={styles.csBulletItem}>
+                            {f.quote} - {f.author}
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
                 </div>
 
                 <div style={styles.csSectionBox}>
@@ -1152,13 +1538,15 @@ export default function Portfolio() {
   };
 
   const activeCS = caseStudiesData.find(cs => cs.id === activeCaseStudy);
-
-  const skills = [
-    { category: 'Product & Process', items: ['Agile/Scrum', 'PRD Writing', 'Sprint Planning', 'Requirements Gathering', 'User Interviews', 'UAT'] },
-    { category: 'Programming', items: ['Python', 'C/C++', 'SQL', 'Data Pipelines', 'API Integration'] },
-    { category: 'Technical Tools', items: ['Git/GitHub', 'REST APIs', 'Jira', 'LLM Tools & Agents', 'RAG Workflows'] },
-    { category: 'Other', items: ['Microsoft Tools', 'PowerPoint', 'Excel', 'SharePoint', 'Figma'] }
+  const projectNavItems = [
+    { id: 'instatools', label: 'InstaTool', caseStudyId: 'instatools' },
+    { id: 'slugmates', label: 'Slugmates', caseStudyId: 'slugmates' },
+    { id: 'tallyrus', label: 'Tallyrus', caseStudyId: 'tallyrus' }
   ];
+  const projectDisplayOrder = ['tallyrus', 'instatools', 'slugmates'];
+  const orderedProjects = [...caseStudiesData].sort(
+    (a, b) => projectDisplayOrder.indexOf(a.id) - projectDisplayOrder.indexOf(b.id)
+  );
 
   const workExperience = [
     {
@@ -1172,10 +1560,25 @@ export default function Portfolio() {
       color: '#d4849a',
       description: 'Owning the AI product roadmap for an early-stage startup, shipping features from 0→1.',
       highlights: [
-        'Shipped 3 AI features in first 2 months by driving end-to-end development from discovery to launch',
-        'Reduced feature cycle time by 40% through streamlined PRDs and clear Jira epic structures',
-        'Orchestrated daily standups across 3 teams (backend, frontend, AI) to hit every sprint deadline',
-        'Uncovered 5 critical user pain points through founder and customer interviews that shaped product strategy'
+        'Led AI product strategy for 8+ ML + AI-powered features reducing research time by over 80%',
+        'Collaborated with the distributed ML team to ship classification models for startup evaluation achieving over a 95% accuracy score and conducted A/B testing increasing adoption by 35%',
+        'Managed sprint planning across backend/frontend/AI teams with 40+ user stories; implemented Jira automation reducing manual maintenance by 60%'
+      ]
+    },
+    {
+      company: 'Tallyrus',
+      logo: tallyrusLogo,
+      logoType: 'image',
+      role: 'Product Manager',
+      type: 'Full-Time',
+      period: 'Sep 2024 - March 2025',
+      location: 'Remote',
+      color: '#c9a87c',
+      description: 'Led product delivery for a fast-moving startup team.',
+      highlights: [
+        'Led Agile development establishing sprint planning and backlog grooming to accelerate product delivery',
+        'Architected AI agent frameworks using Vercel AI SDK and LangChain for tool-calling and document analysis',
+        'Deployed CI/CD pipeline with automated testing and linting, reducing regression issues and cutting bug-fix turnaround by over 300%'
       ]
     },
     {
@@ -1200,7 +1603,7 @@ export default function Portfolio() {
       logo: '📰',
       logoType: 'emoji',
       role: 'Product Manager Intern',
-      type: 'Part-Time',
+      type: 'Full-Time',
       period: 'Jan 2023 - May 2023',
       location: 'Remote',
       color: '#8fa89a',
@@ -1246,15 +1649,6 @@ export default function Portfolio() {
 
             <MagneticElement strength={0.2}>
               <button
-                onClick={() => scrollToSection('about')}
-                style={{ ...styles.navLink, ...(activeSection === 'about' ? styles.navLinkActive : {}) }}
-              >
-                About
-              </button>
-            </MagneticElement>
-
-            <MagneticElement strength={0.2}>
-              <button
                 onClick={() => scrollToSection('experience')}
                 style={{ ...styles.navLink, ...(activeSection === 'experience' ? styles.navLinkActive : {}) }}
               >
@@ -1262,16 +1656,7 @@ export default function Portfolio() {
               </button>
             </MagneticElement>
 
-            <MagneticElement strength={0.2}>
-              <button
-                onClick={() => scrollToSection('projects')}
-                style={{ ...styles.navLink, ...(activeSection === 'projects' ? styles.navLinkActive : {}) }}
-              >
-                Projects
-              </button>
-            </MagneticElement>
-
-            {/* Case Studies dropdown */}
+            {/* Projects + Case Studies dropdown */}
             <div
               style={{ position: 'relative' }}
               onMouseEnter={() => setCaseMenuOpen(true)}
@@ -1282,13 +1667,13 @@ export default function Portfolio() {
                   onClick={() => setCaseMenuOpen((v) => !v)}
                   style={{
                     ...styles.navLink,
-                    ...(view === 'caseStudy' ? styles.navLinkActive : {}),
+                    ...((activeSection === 'projects' || view === 'caseStudy') ? styles.navLinkActive : {}),
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px'
                   }}
                 >
-                  Case Studies <span style={{ fontSize: '0.85em', opacity: 0.7 }}>▾</span>
+                  Projects <span style={{ fontSize: '0.85em', opacity: 0.7 }}>v</span>
                 </button>
               </MagneticElement>
 
@@ -1303,47 +1688,53 @@ export default function Portfolio() {
                     border: '1px solid rgba(0,0,0,0.06)',
                     borderRadius: '14px',
                     padding: '8px',
-                    minWidth: '190px',
+                    minWidth: '240px',
                     boxShadow: '0 18px 50px rgba(0,0,0,0.10)',
                     zIndex: 9999
                   }}
                 >
-                  <button
-                    onClick={() => goToCaseStudy('instatools')}
-                    style={{
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '10px 12px',
-                      borderRadius: '12px',
-                      border: 'none',
-                      background: 'transparent',
-                      cursor: 'pointer',
-                      fontFamily: 'inherit',
-                      fontSize: '14px'
-                    }}
-                    onMouseEnter={() => setCursorText('Open')}
-                    onMouseLeave={() => setCursorText('')}
-                  >
-                    InstaTools
-                  </button>
-                  <button
-                    onClick={() => goToCaseStudy('slugmates')}
-                    style={{
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '10px 12px',
-                      borderRadius: '12px',
-                      border: 'none',
-                      background: 'transparent',
-                      cursor: 'pointer',
-                      fontFamily: 'inherit',
-                      fontSize: '14px'
-                    }}
-                    onMouseEnter={() => setCursorText('Open')}
-                    onMouseLeave={() => setCursorText('')}
-                  >
-                    Slugmates
-                  </button>
+                  {projectNavItems.map((project) => (
+                    <div key={project.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, padding: '6px 4px' }}>
+                      <button
+                        onClick={() => { setCaseMenuOpen(false); scrollToSection('projects'); }}
+                        style={{
+                          flex: 1,
+                          textAlign: 'left',
+                          padding: '8px 10px',
+                          borderRadius: '10px',
+                          border: 'none',
+                          background: 'transparent',
+                          cursor: 'pointer',
+                          fontFamily: 'inherit',
+                          fontSize: '14px'
+                        }}
+                        onMouseEnter={() => setCursorText('Open')}
+                        onMouseLeave={() => setCursorText('')}
+                      >
+                        {project.label}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setCaseMenuOpen(false);
+                          if (project.caseStudyId) goToCaseStudy(project.caseStudyId);
+                          else scrollToSection('projects');
+                        }}
+                        style={{
+                          padding: '8px 10px',
+                          borderRadius: '10px',
+                          border: '1px solid rgba(212,132,154,0.3)',
+                          background: 'rgba(212,132,154,0.08)',
+                          cursor: 'pointer',
+                          fontFamily: 'inherit',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          color: '#6b5e50'
+                        }}
+                      >
+                        Case Study
+                      </button>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -1373,14 +1764,23 @@ export default function Portfolio() {
         {mobileMenuOpen && (
           <div style={styles.mobileMenu}>
             <button onClick={() => scrollToSection('home')} style={{...styles.mobileMenuItem, ...(activeSection === 'home' ? styles.mobileMenuItemActive : {})}}>Home</button>
-            <button onClick={() => scrollToSection('about')} style={{...styles.mobileMenuItem, ...(activeSection === 'about' ? styles.mobileMenuItemActive : {})}}>About</button>
             <button onClick={() => scrollToSection('experience')} style={{...styles.mobileMenuItem, ...(activeSection === 'experience' ? styles.mobileMenuItemActive : {})}}>Experience</button>
-            <button onClick={() => scrollToSection('projects')} style={{...styles.mobileMenuItem, ...(activeSection === 'projects' ? styles.mobileMenuItemActive : {})}}>Projects</button>
-
             <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid rgba(0,0,0,0.06)' }}>
-              <div style={{ fontSize: 12, opacity: 0.7, padding: '6px 12px' }}>Case Studies</div>
-              <button onClick={() => goToCaseStudy('instatools')} style={styles.mobileMenuItem}>InstaTools</button>
-              <button onClick={() => goToCaseStudy('slugmates')} style={styles.mobileMenuItem}>Slugmates</button>
+              <div style={{ fontSize: 12, opacity: 0.7, padding: '6px 12px' }}>Projects</div>
+              {projectNavItems.map((project) => (
+                <div key={project.id} style={{ display: 'flex', gap: 8, padding: '0 8px 6px' }}>
+                  <button onClick={() => { scrollToSection('projects'); setMobileMenuOpen(false); }} style={{...styles.mobileMenuItem, flex: 1, margin: 0}}>{project.label}</button>
+                  <button
+                    onClick={() => {
+                      if (project.caseStudyId) goToCaseStudy(project.caseStudyId);
+                      else { scrollToSection('projects'); setMobileMenuOpen(false); }
+                    }}
+                    style={{...styles.mobileMenuItem, margin: 0, whiteSpace: 'nowrap'}}
+                  >
+                    Case Study
+                  </button>
+                </div>
+              ))}
             </div>
 
             <button onClick={() => scrollToSection('contact')} style={{...styles.mobileMenuItem, ...(activeSection === 'contact' ? styles.mobileMenuItemActive : {})}}>Contact</button>
@@ -1399,11 +1799,11 @@ export default function Portfolio() {
               <span>Actively Seeking PM / PgM / BSA Roles</span>
             </div>
             <h1 style={styles.heroTitle}>
-              <span style={{...styles.heroLine, opacity: isLoaded ? 1 : 0, transform: isLoaded ? 'translateY(0)' : 'translateY(100%)', transition: 'all 0.8s ease 0.3s'}}>Hello, I'm</span>
-              <span style={{...styles.heroName, opacity: isLoaded ? 1 : 0, transform: isLoaded ? 'translateY(0)' : 'translateY(100%)', transition: 'all 1s ease 0.5s'}}>Meha</span>
+              <span style={{...styles.heroLine, opacity: isLoaded ? 1 : 0, transform: isLoaded ? 'translateY(0)' : 'translateY(100%)', transition: 'all 0.8s ease 0.3s'}}>Hell I&apos;m</span>
+              <span style={{...styles.heroName, opacity: isLoaded ? 1 : 0, transform: isLoaded ? 'translateY(0)' : 'translateY(100%)', transition: 'all 1s ease 0.5s'}}>Meha M</span>
             </h1>
             <p style={{...styles.heroDesc, opacity: isLoaded ? 1 : 0, transition: 'all 0.8s ease 0.7s'}}>
-              Final-year CS student with 2 years of <span style={styles.highlight}>Product</span> and <span style={styles.highlight}>Program Management</span> experience. Passionate about building products that solve real problems.
+              I am a Product Manager with over 3 years of experience, with focused experience, building AI-driven, user-focused products in both startup environments and enterprise-scale organizations.
             </p>
             <div style={{...styles.heroBtns, opacity: isLoaded ? 1 : 0, transition: 'all 0.8s ease 0.9s'}} className="hero-btns">
               <MagneticElement>
@@ -1419,12 +1819,9 @@ export default function Portfolio() {
             </div>
           </div>
           <div style={{...styles.heroVisual, opacity: isLoaded ? 1 : 0, transform: isLoaded ? 'scale(1)' : 'scale(0.8)', transition: 'all 1.2s ease 0.4s'}} className="hero-visual">
-            {[{e: '✨', t: 'Product Strategy', top: '15%', left: '10%'}, {e: '🎯', t: 'User Research', top: '40%', left: '40%'}, {e: '📊', t: 'Data-Driven', top: '65%', left: '5%'}].map((c, i) => (
-              <div key={i} style={{...styles.heroCard, top: c.top, left: c.left, animationDelay: `${i * -2}s`}}>
-                <span style={{fontSize: '1.25rem'}}>{c.e}</span>
-                <span style={{fontSize: '0.9rem', fontWeight: 600}}>{c.t}</span>
-              </div>
-            ))}
+            <div style={styles.heroHeadshotWrap}>
+              <img src={headshot} alt="Portrait of Meha" style={styles.heroHeadshot} />
+            </div>
           </div>
         </div>
         <div style={styles.scrollHint}>
@@ -1433,50 +1830,11 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* About */}
-      <section id="about" style={styles.section} className="section">
-        <div style={styles.sectionInner} className="section-inner">
-          <RevealOnScroll>
-            <div style={styles.sectionLabel}><span style={styles.labelNum}>01</span><span style={styles.labelLine} /><span>About</span></div>
-          </RevealOnScroll>
-          <div style={styles.aboutGrid} className="about-grid">
-            <RevealOnScroll delay={200}>
-              <h2 style={styles.aboutTitle}>I turn ambiguity into <span style={styles.aboutAccent}>clear product direction</span></h2>
-              <p style={styles.aboutText}>I'm a detail-oriented product thinker combining user research with technical understanding. I thrive in ambiguous environments and love turning fuzzy ideas into shipped features.</p>
-            </RevealOnScroll>
-            <div style={styles.valuesGrid} className="values-grid">
-              {[{i: '✿', t: 'Strategic', d: 'See the forest and trees', c: '#d4849a'}, {i: '♡', t: 'Empathetic', d: 'Users first, always', c: '#c9a87c'}, {i: '◇', t: 'Technical', d: 'Speak engineering\'s language', c: '#8fa89a'}, {i: '○', t: 'Data-Driven', d: 'Insights-led decisions', c: '#a89ab8'}].map((v, i) => (
-                <RevealOnScroll key={i} delay={300 + i * 100} direction="scale">
-                  <div style={{...styles.valueCard, borderColor: v.c}}>
-                    <span style={{...styles.valueIcon, color: v.c}}>{v.i}</span>
-                    <h4 style={styles.valueTitle}>{v.t}</h4>
-                    <p style={styles.valueDesc}>{v.d}</p>
-                  </div>
-                </RevealOnScroll>
-              ))}
-            </div>
-          </div>
-          <RevealOnScroll delay={400}>
-            <div style={styles.skillsBox}>
-              <h3 style={styles.skillsTitle}>Skills & Expertise</h3>
-              <div style={styles.skillsGrid} className="skills-grid">
-                {skills.map((cat, i) => (
-                  <div key={i} style={styles.skillCat}>
-                    <h4 style={styles.skillCatTitle}>{cat.category}</h4>
-                    {cat.items.map(s => <span key={s} style={styles.skillPill}>{s}</span>)}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </RevealOnScroll>
-        </div>
-      </section>
-
       {/* Work Experience */}
       <section id="experience" style={{...styles.section, background: 'linear-gradient(180deg, #fff8f6 0%, #fffbf8 100%)'}} className="section">
         <div style={styles.sectionInner} className="section-inner">
           <RevealOnScroll>
-            <div style={styles.sectionLabel}><span style={styles.labelNum}>02</span><span style={styles.labelLine} /><span>Experience</span></div>
+            <div style={styles.sectionLabel}><span style={styles.labelNum}>01</span><span style={styles.labelLine} /><span>Experience</span></div>
           </RevealOnScroll>
           
           <div style={styles.experienceContainer} className="exp-container">
@@ -1497,7 +1855,9 @@ export default function Portfolio() {
                   {/* Header */}
                   <div style={styles.expHeader} className="exp-header">
                     <div style={{...styles.expLogo, background: `${exp.color}15`, borderColor: `${exp.color}30`}} className="exp-logo">
-                      {exp.logoType === 'emoji' ? (
+                      {exp.company === 'Boxsy' ? (
+                        <img src={boxsyLogo} alt="Boxsy logo" style={{width: 40, height: 40, objectFit: 'contain'}} />
+                      ) : exp.logoType === 'emoji' ? (
                         <span style={{fontSize: '2rem'}}>{exp.logo}</span>
                       ) : (
                         <img src={exp.logo} alt={exp.company} style={{width: 40, height: 40, objectFit: 'contain'}} />
@@ -1506,6 +1866,15 @@ export default function Portfolio() {
                     <div style={styles.expHeaderInfo}>
                       <div style={styles.expCompanyRow}>
                         <h3 style={styles.expCompany}>{exp.company}</h3>
+                        {exp.company === 'Boxsy' && (
+                          <span style={{...styles.expType, background: `${exp.color}15`, color: exp.color}}>AI SaaS startup</span>
+                        )}
+                        {exp.company === 'Tallyrus' && (
+                          <span style={{...styles.expType, background: `${exp.color}15`, color: exp.color}}>AI Ed-tech startup</span>
+                        )}
+                        {exp.company === 'News Focus LLC' && (
+                          <span style={{...styles.expType, background: `${exp.color}15`, color: exp.color}}>Social media firm</span>
+                        )}
                         <span style={{...styles.expType, background: `${exp.color}15`, color: exp.color}}>{exp.type}</span>
                       </div>
                       <p style={styles.expRole}>{exp.role}</p>
@@ -1539,11 +1908,11 @@ export default function Portfolio() {
       <section id="projects" style={styles.section} className="section">
         <div style={styles.sectionInner} className="section-inner">
           <RevealOnScroll>
-            <div style={styles.sectionLabel}><span style={styles.labelNum}>03</span><span style={styles.labelLine} /><span>Projects</span></div>
+            <div style={styles.sectionLabel}><span style={styles.labelNum}>02</span><span style={styles.labelLine} /><span>Projects</span></div>
           </RevealOnScroll>
           
           <div style={styles.projectsList}>
-            {caseStudiesData.map((p, i) => (
+            {orderedProjects.map((p, i) => (
               <RevealOnScroll key={p.id} delay={i * 150}>
                 <div style={{...styles.projectCardNew, borderLeft: `4px solid ${p.color}`}}>
                       <div style={styles.projectCardHeader}>
@@ -1648,7 +2017,7 @@ export default function Portfolio() {
       <section id="contact" style={styles.contactSection} className="section">
         <div style={styles.contactInner}>
           <RevealOnScroll>
-            <div style={{...styles.sectionLabel, justifyContent: 'center'}}><span style={styles.labelNum}>04</span><span style={styles.labelLine} /><span>Contact</span></div>
+            <div style={{...styles.sectionLabel, justifyContent: 'center'}}><span style={styles.labelNum}>03</span><span style={styles.labelLine} /><span>Contact</span></div>
           </RevealOnScroll>
           <RevealOnScroll delay={200}><h2 style={styles.contactTitle}><TextReveal text="Let's work together" delay={400} /></h2></RevealOnScroll>
           <RevealOnScroll delay={400}><p style={styles.contactDesc}>I'm actively seeking PM, PgM, or Technical BSA roles where I can make an impact.</p></RevealOnScroll>
@@ -1699,7 +2068,7 @@ export default function Portfolio() {
         /* Mobile Responsive Styles */
         @media (max-width: 768px) {
           .hero-grid { grid-template-columns: 1fr !important; text-align: center; }
-          .hero-visual { display: none !important; }
+          .hero-visual { display: flex !important; justify-content: center !important; margin-top: 1.5rem !important; }
           .hero-content { padding: 0 1rem; }
           .hero-btns { flex-direction: column !important; align-items: center; }
           .hero-btns button { width: 100%; max-width: 280px; }
@@ -1727,6 +2096,9 @@ export default function Portfolio() {
           .cs-tabs { flex-wrap: wrap !important; justify-content: center; }
           .cs-tab { flex: 1 1 auto; min-width: 140px; justify-content: center; }
           .cs-mockup-grid { grid-template-columns: 1fr !important; }
+          .ai-layout { grid-template-columns: 1fr !important; }
+          .ai-card-grid { grid-template-columns: 1fr !important; }
+          .ai-role-sidebar { position: static !important; }
           
           .cs-context-grid { grid-template-columns: 1fr !important; }
           .cs-pain-grid { grid-template-columns: 1fr !important; }
@@ -1813,7 +2185,9 @@ const styles = {
   heroBtns: { display: 'flex', gap: '1rem' },
   primaryBtn: { display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem 2rem', background: '#3d3229', border: 'none', borderRadius: 100, fontSize: '0.9rem', fontWeight: 600, color: '#fffbf8', fontFamily: '"Outfit", sans-serif' },
   secondaryBtn: { padding: '1rem 2rem', background: 'transparent', border: '2px solid rgba(61,50,41,0.2)', borderRadius: 100, fontSize: '0.9rem', fontWeight: 600, color: '#3d3229', fontFamily: '"Outfit", sans-serif' },
-  heroVisual: { position: 'relative', height: 400 },
+  heroVisual: { position: 'relative', minHeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  heroHeadshotWrap: { width: 'min(360px, 80vw)', aspectRatio: '1 / 1', borderRadius: '32px', padding: '10px', background: 'linear-gradient(135deg, rgba(212,132,154,0.3), rgba(201,168,124,0.3))', boxShadow: '0 24px 70px rgba(0,0,0,0.12)' },
+  heroHeadshot: { width: '100%', height: '100%', objectFit: 'cover', borderRadius: '24px', display: 'block' },
   heroCard: { position: 'absolute', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1.25rem 1.75rem', background: 'rgba(255,255,255,0.95)', border: '1px solid rgba(212,132,154,0.2)', borderRadius: 16, boxShadow: '0 20px 60px rgba(0,0,0,0.06)', animation: 'float 6s ease-in-out infinite' },
   scrollHint: { position: 'absolute', bottom: '3rem', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' },
   scrollText: { fontSize: '0.7rem', fontWeight: 500, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#b5a799' },
@@ -1906,6 +2280,19 @@ const styles = {
   csNote: { fontSize: '0.85rem', color: '#6b5e50', marginTop: '0.5rem' },
   csBulletList: { margin: '0.5rem 0 1rem', paddingLeft: '1.1rem', color: '#6b5e50', lineHeight: 1.6 },
   csBulletItem: { marginBottom: '0.35rem' },
+  aiLayout: { display: 'grid', gridTemplateColumns: '2.2fr 1fr', gap: '1rem', alignItems: 'start' },
+  aiCardGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem', marginBottom: '0.9rem' },
+  aiCard: { border: '1px solid rgba(212,132,154,0.3)', borderRadius: 14, padding: '0.9rem', background: 'rgba(255,255,255,0.85)' },
+  aiCardTitle: { fontSize: '0.95rem', fontWeight: 700, color: '#4a3b33', marginBottom: '0.45rem' },
+  aiItem: { fontSize: '0.82rem', color: '#6b5e50', lineHeight: 1.5, marginBottom: '0.35rem' },
+  aiImpact: { fontSize: '0.83rem', color: '#4f4439', lineHeight: 1.55, marginTop: '0.4rem', paddingTop: '0.45rem', borderTop: '1px dashed rgba(212,132,154,0.25)' },
+  aiMetricsWrap: { border: '1px solid rgba(212,132,154,0.3)', borderRadius: 12, background: 'rgba(255,255,255,0.85)', padding: '0.8rem' },
+  aiMetricsTitle: { fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7f6570', marginBottom: '0.5rem' },
+  aiMetricsRow: { display: 'flex', flexWrap: 'wrap', gap: '0.45rem' },
+  aiMetricChip: { fontSize: '0.78rem', fontWeight: 600, color: '#5a4a42', padding: '0.3rem 0.55rem', borderRadius: 999, background: 'rgba(212,132,154,0.12)', border: '1px solid rgba(212,132,154,0.25)' },
+  aiRoleSidebar: { position: 'sticky', top: '1rem', border: '1px solid rgba(212,132,154,0.3)', borderRadius: 14, background: 'rgba(255,255,255,0.9)', padding: '0.9rem' },
+  aiRoleTitle: { fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#7f6570', marginBottom: '0.6rem' },
+  aiRoleList: { margin: 0, paddingLeft: '1rem', color: '#5f5246', fontSize: '0.82rem', lineHeight: 1.65 },
   csMockupGrid: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem', margin: '0.75rem 0 1rem' },
   csMockupGridTwo: { display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem', margin: '0.75rem 0 1rem' },
   csMockupGridStack: { display: 'grid', gridTemplateColumns: '1fr', gap: '1rem', margin: '0.75rem 0 1rem' },
