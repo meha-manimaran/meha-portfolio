@@ -1543,7 +1543,7 @@ export default function Portfolio() {
     { id: 'slugmates', label: 'Slugmates', caseStudyId: 'slugmates' },
     { id: 'tallyrus', label: 'Tallyrus', caseStudyId: 'tallyrus' }
   ];
-  const projectDisplayOrder = ['tallyrus', 'instatools', 'slugmates'];
+  const projectDisplayOrder = ['instatools', 'tallyrus', 'slugmates'];
   const orderedProjects = [...caseStudiesData].sort(
     (a, b) => projectDisplayOrder.indexOf(a.id) - projectDisplayOrder.indexOf(b.id)
   );
