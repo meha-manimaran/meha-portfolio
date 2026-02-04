@@ -150,7 +150,7 @@ const caseStudiesData = [
     id: 'instatools', title: 'InstaTools', emoji: '🛡️', badge: 'B2B SaaS Product',
     subtitle: 'Pay-per-use compliance tools for early-stage startups',
     color: '#d4849a',
-    overview: { role: 'Product Manager', timeline: 'Sep 2025 - Dec 2025 (4 months)', team: '1 PM (me), 1 Engineer', tools: ['Figma', 'Replit'], status: 'Completed & Launched' },
+    overview: { role: 'Product Manager', timeline: 'Aug 2025 - Dec 2025 (5 months)', team: '1 PM (me), 1 Engineer', tools: ['Figma', 'Replit'], status: 'Completed & Launched' },
     links: { prototype: null, prd: null, live: 'https://instatools.co/' },
     
     // 1. Problem Statement
